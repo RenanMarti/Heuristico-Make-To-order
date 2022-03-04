@@ -1,0 +1,196 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fmodern\fprq1\fcharset0 Courier New;}{\f1\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\hyphpar0\widctlpar\li567\ri567\sl360\slmult1\qj\b\f0\fs24\lang1046 TABELAS\par
+\b0\fs20 dbo.ColummName\par
+dbo.ColummNameMistura\par
+dbo.MateriaPrimaMoegas\par
+dbo.Moegas\par
+dbo.Ordens\par
+dbo.PrioridadeMateriaPrima\par
+dbo.Receita\par
+dbo.SequenciaCarga\par
+dbo.SequenciaInvertida\par
+dbo.Sequenciamento\par
+dbo.SequenciaMistura\par
+dbo.SequenciaMisturasSequenciado\par
+dbo.VerificaPrioridadeMateriaPrima\par
+\par
+\b\fs24 C\'d3DIGO\par
+\b0\fs20\par
+
+\pard\hyphpar0\widctlpar\fi720\sl360\slmult1\qj BEGIN /* SEQUENCIAMENTO HEUR\'cdSTICO */\par
+BEGIN /* INICIO DA TABELA PARA LER NUMERO DAS COLUNAS */\par
+\tab\tab\tab\tab\par
+\tab\tab\lang1033 TRUNCATE TABLE ColummName \tab\tab\tab\tab\par
+\tab\tab TRUNCATE TABLE ColummNameMistura\par
+\tab\tab\lang1046 TRUNCATE TABLE [sequenciamento].[dbo].[SequenciaMistura]\par
+\tab\tab TRUNCATE TABLE [sequenciamento].[dbo].[SequenciaMisturasSequenciado]\par
+\tab\tab\par
+\tab\tab\lang1033 DECLARE @NomePrimeiraMateriaPrima AS VARCHAR(MAX)\par
+\tab\tab DECLARE @NumeroPrimeiraColuna AS INT\par
+\tab\tab DECLARE @StringSQL VARCHAR(MAX)\par
+\tab\tab\par
+\tab\tab SET @NomePrimeiraMateriaPrima = 'MP1'\par
+\par
+\tab\tab SET @NumeroPrimeiraColuna = (SELECT  ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='Receita' AND COLUMN_NAME=@NomePrimeiraMateriaPrima)\par
+\par
+\tab\tab\lang1046 INSERT INTO [sequenciamento].[dbo].[ColummNameMistura]\par
+\tab\tab SELECT Colunas.COLUMN_NAME NomeColuna, Colunas.ORDINAL_POSITION Posicao, Moegas.Contagem Contagem,0\par
+        \lang1033 FROM INFORMATION_SCHEMA.COLUMNS Colunas\par
+\tab\tab LEFT JOIN (SELECT MateriaPrimA, Count(MateriaPrimA) Contagem FROM Moegas WHERE NOT MateriaPrimA IS NULL GROUP BY MateriaPrimA) Moegas\par
+\tab\tab ON Colunas.COLUMN_NAME = Moegas.MateriaPrima\par
+        WHERE TABLE_NAME = 'Receita' AND ORDINAL_POSITION>=@NumeroPrimeiraColuna\par
+\tab\tab ORDER BY Contagem DESC,\tab Posicao ASC\par
+\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP1] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP1]  IS NULL) AND Receita.[MP1] < 1 \tab GROUP BY Receita.[MP1]) as TABELA) WHERE [NomeColuna]='MP1'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP2] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP2]  IS NULL) AND Receita.[MP2] < 1 \tab GROUP BY Receita.[MP2]) as TABELA) WHERE [NomeColuna]='MP2'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP2] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP2]  IS NULL) AND Receita.[MP2] < 1 \tab GROUP BY Receita.[MP2]) as TABELA) WHERE [NomeColuna]='MP2'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP3] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP3]  IS NULL) AND Receita.[MP3] < 1 \tab GROUP BY Receita.[MP3]) as TABELA) WHERE [NomeColuna]='MP3'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP4] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP4]  IS NULL) AND Receita.[MP4] < 1 \tab GROUP BY Receita.[MP4]) as TABELA) WHERE [NomeColuna]='MP4'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP5] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP5]  IS NULL) AND Receita.[MP5] < 1 \tab GROUP BY Receita.[MP5]) as TABELA) WHERE [NomeColuna]='MP5'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP6] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP6]  IS NULL) AND Receita.[MP6] < 1 \tab GROUP BY Receita.[MP6]) as TABELA) WHERE [NomeColuna]='MP6'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP7] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP7]  IS NULL) AND Receita.[MP7] < 1 \tab GROUP BY Receita.[MP7]) as TABELA) WHERE [NomeColuna]='MP7'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP8] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP8]  IS NULL) AND Receita.[MP8] < 1 \tab GROUP BY Receita.[MP8]) as TABELA) WHERE [NomeColuna]='MP8'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP9] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP9]  IS NULL) AND Receita.[MP9] < 1 \tab GROUP BY Receita.[MP9]) as TABELA) WHERE [NomeColuna]='MP9'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP10] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP10]  IS NULL) AND Receita.[MP10] < 1 \tab GROUP BY Receita.[MP10]) as TABELA) WHERE [NomeColuna]='MP10'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP11] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP11]  IS NULL) AND Receita.[MP11] < 1 \tab GROUP BY Receita.[MP11]) as TABELA) WHERE [NomeColuna]='MP11'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP12] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP12]  IS NULL) AND Receita.[MP12] < 1 \tab GROUP BY Receita.[MP12]) as TABELA) WHERE [NomeColuna]='MP12'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP13] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP13]  IS NULL) AND Receita.[MP13] < 1 \tab GROUP BY Receita.[MP13]) as TABELA) WHERE [NomeColuna]='MP13'\par
+\tab\tab UPDATE ColummNameMistura SET Misturas=(SELECT Sum(Contagem) FROM\tab (SELECT Count(*) Contagem, Receita.[MP14] FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE NOT(Receita.[MP14]  IS NULL) AND Receita.[MP14] < 1 \tab GROUP BY Receita.[MP14]) as TABELA) WHERE [NomeColuna]='MP14'\par
+\par
+\tab\tab\lang1046 INSERT INTO ColummName (NomeColuna, NumeroColuna,Contagem, Mistura) SELECT NomeColuna,NumeroColuna,Contagem,Misturas FROM ColummNameMistura ORDER BY Misturas ASC--, Prioridade DESC \par
+\tab\tab\tab\par
+\par
+END /* FIM DA TABELA PARA LER NUMERO DAS COLUNAS */ \par
+\par
+\par
+BEGIN /* PASSO 1 - INICIO ORDENA\'c7\'c3O PARA PUROS EM MOEGAS COM PRIORIDADE DE PUROS*/ \par
+\par
+\tab\tab\lang1033 DECLARE @NomeColunaAtual VARCHAR(MAX)\par
+\tab\tab DECLARE @Contador INT\par
+\tab\tab\tab\lang1046 TRUNCATE TABLE SeguenciaCarga\par
+\par
+\tab\tab TRUNCATE TABLE [sequenciamento].[dbo].[Sequenciamento]\par
+\tab\tab\lang1033 SET  @Contador = (SELECT Min(Prioridade) FROM ColummName)\par
+\tab\tab WHILE @Contador<=(SELECT Max(Prioridade) FROM ColummName) BEGIN\par
+\tab\tab SET @NomeColunaAtual = (SELECT NomeColuna FROM ColummName WHERE Prioridade=@Contador)\par
+\tab\tab\tab IF EXISTS(SELECT MateriaPrima FROM [sequenciamento].[dbo].[Moegas] WHERE MateriaPrima=@NomeColunaAtual) BEGIN\par
+\par
+\tab\tab\tab\lang1046 SET @StringSQL =' INSERT INTO  [sequenciamento].[dbo].[Sequenciamento] SELECT Ordens.Ordem FROM [sequenciamento].[dbo].[Ordens] Ordens JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE Receita.['+@NomeColunaAtual+'] = 1'\par
+\par
+\tab\tab\tab\tab PRINT(@StringSQL)\par
+\tab\tab\tab\tab PRINT(@NomeColunaAtual)\par
+\tab\tab\tab\tab EXECUTE(@StringSQL)\par
+\tab\tab\tab\tab END\par
+\tab\tab SET  @Contador =  @Contador+1\par
+\tab\tab END\par
+\par
+END /* FIM ORDENA\'c7\'c3O PARA PUROS EM MOEGAS COM PRIORIDADE POR PUROS*/ \par
+\par
+\par
+BEGIN /*PASSO 2 - ORDENA\'c7\'c3O DAS RECEITAS QUE N\'c3O S\'c3O PURAS MAS TEM RELA\'c7\'c3O COM A MATERIA PRIMA DA ULTIMA SEQUENCIA */\par
+\tab TRUNCATE TABLE SequenciaInvertida\par
+\tab TRUNCATE TABLE PrioridadeMateriaPrima\par
+\par
+\tab INSERT INTO SequenciaInvertida \par
+\tab SELECT R.[Codigo Material] FROM sequenciamento S \par
+\tab JOIN Ordens O ON S.Ordem = O.Ordem\par
+\tab JOIN Receita R ON\tab O.[Codigo Material] = R.[Codigo Material]\par
+\tab ORDER BY S.NumeroSequencia DESC\par
+\par
+\tab\tab BEGIN /* PERCORRER TODAS AS RECEITAS NA TABELA INVERTIDA */\par
+\par
+\tab\tab\lang1033 PRINT \par
+\tab\tab DECLARE @I INT\par
+\tab\tab DECLARE @X INT\par
+\tab\tab DECLARE @CODIGORECEITASEQUENCIAINVERTIDA BIGINT\par
+\tab\tab TRUNCATE TABLE VerificaPrioridadeMateriaPrima\par
+\tab\tab SET  @I = (SELECT Min(NumeroSequencia) FROM SequenciaInvertida)\par
+\tab\tab WHILE @I<=(SELECT Max(NumeroSequencia) FROM SequenciaInvertida) BEGIN\par
+\tab\tab\tab SET @CODIGORECEITASEQUENCIAINVERTIDA = (SELECT CodigoReceita FROM SequenciaInvertida WHERE NumeroSequencia = @I)\par
+\tab\tab\tab SET  @X = (SELECT Min(Prioridade) FROM ColummName)\par
+\tab\tab\tab\tab WHILE @X<=(SELECT Max(Prioridade) FROM ColummName) BEGIN\par
+\tab\tab\tab\tab\tab SET @NomeColunaAtual = (SELECT NomeColuna FROM ColummName WHERE Prioridade=@X)\par
+\tab\tab\tab\tab\tab PRINT @NomeColunaAtual\par
+\tab\tab\tab\tab\tab SET @StringSQL = 'IF NOT EXISTS(SELECT [NomeMateriaPrima] FROM [sequenciamento].[dbo].[VerificaPrioridadeMateriaPrima] WHERE [NomeMateriaPrima]='''+@NomeColunaAtual+''')\tab BEGIN INSERT INTO [sequenciamento].[dbo].[VerificaPrioridadeMateriaPrima] (NomeMateriaPrima, Proporcao) VALUES ('''+@NomeColunaAtual+''',(SELECT ['+@NomeColunaAtual+'] FROM Receita WHERE [Codigo Material]='+CAST(@CODIGORECEITASEQUENCIAINVERTIDA AS VARCHAR(MAX))+')) END'\par
+\tab\tab\tab\tab\tab PRINT @StringSQL\par
+\tab\tab\tab\tab\tab\tab\tab\par
+\tab\tab\tab\tab\tab EXECUTE(@StringSQL)\par
+\tab\tab\tab\tab\tab DELETE FROM [sequenciamento].[dbo].[VerificaPrioridadeMateriaPrima] WHERE Proporcao IS NULL\par
+\tab\tab\tab\tab\tab SET @X=@X+1\tab\par
+\tab\tab\tab\tab END\par
+\tab\tab\tab\tab\tab INSERT INTO PrioridadeMateriaPrima SELECT NomeMateriaPrima FROM [sequenciamento].[dbo].[VerificaPrioridadeMateriaPrima] WHERE NomeMateriaPrima NOT IN(SELECT NomeMateriaPrima FROM  [sequenciamento].[dbo].[PrioridadeMateriaPrima]) AND Proporcao>0 ORDER BY Proporcao DESC\par
+\tab\tab\tab\tab\tab\par
+\tab\tab\tab\lang1046 TRUNCATE TABLE [sequenciamento].[dbo].[VerificaPrioridadeMateriaPrima]\par
+\tab\tab\tab SET @I=@I+1\par
+\tab\tab END \par
+\tab\tab END /* PERCORRER TODAS AS RECEITAS NA TABELA INVERTIDA */\par
+END /*ORDENA\'c7\'c3O DA ORDENA\'c7\'c3O DAS RECEITAS QUE N\'c3O S\'c3O PURAS MAS TEM RELA\'c7\'c3O COM A MATERIA PRIMA DA ULTIMA SEQUENCIA */\par
+\par
+BEGIN /* PASSO 3 - ORDENA\'c7\'c3O DAS MISTURAS COM RELA\'c7\'c3O A ULTIMA SEQUENCIA */\par
+\par
+\tab\tab BEGIN /* VERIFICA QUAIS MATERIAS PRIMAS TEM NA ULTIMA SEQUENCIA */\par
+\par
+\tab\tab\lang1033 DECLARE @UltimaOrdem INT\par
+\tab\tab DECLARE @UltimaReceita INT\par
+\tab\tab DECLARE @ProporcaoReceita DECIMAL(18,2)\par
+\tab\tab DECLARE @QueryOrder VARCHAR(MAX)\par
+\tab\tab WHILE EXISTS (SELECT Ordem FROM Ordens WHERE Ordem NOT IN (SELECT Ordem FROM Sequenciamento)) \par
+\tab\tab\tab BEGIN\par
+\tab\tab\tab SET @UltimaOrdem = (SELECT TOP 1 Ordem FROM Sequenciamento ORDER BY NumeroSequencia DESC)\par
+\tab\tab\tab SET @UltimaReceita = (SELECT [Codigo Material] FROM Ordens WHERE Ordem = @UltimaOrdem)\par
+\tab\tab\tab SET @Contador = (SELECT Min(Prioridade) FROM ColummName)\par
+\par
+\tab\tab\tab\tab\tab\lang1046 PRINT('Ordem' + CAST(@UltimaOrdem AS VARCHAR(MAX)))\par
+\tab\tab\tab\tab BEGIN /* INSERE COLUNAS DA ULTIMA RECEITA */\par
+\tab\tab\tab\tab\tab\lang1033 WHILE @Contador<=(SELECT Max(Prioridade) FROM ColummName) BEGIN\par
+\tab\tab\tab\tab\tab SET @NomeColunaAtual = (SELECT NomeColuna FROM ColummName WHERE Prioridade=@Contador)\par
+\tab\tab\tab\tab\tab\lang1046 SET @StringSQL =' INSERT INTO  [sequenciamento].[dbo].[SequenciaMistura] SELECT '''+@NomeColunaAtual+''',Receita.['+@NomeColunaAtual+'] FROM [sequenciamento].[dbo].[Ordens] Ordens JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE Ordens.Ordem = '''+CAST(@UltimaOrdem AS VARCHAR(MAX))+''''\par
+\tab\tab\tab\tab\tab\par
+\tab\tab\tab\tab\tab\tab\tab --PRINT('INSERINDO COLUNA ' + @StringSQL)\par
+\tab\tab\tab\tab\tab\tab\tab EXECUTE(@StringSQL)\par
+\tab\tab\tab\tab\tab\tab\tab SET  @Contador =  @Contador+1\par
+\tab\tab\tab\tab\tab END\par
+\tab\tab\tab\tab\tab DELETE FROM [sequenciamento].[dbo].[SequenciaMistura] WHERE Proporcao IS NULL\par
+\tab\tab\tab\tab\tab INSERT INTO [sequenciamento].[dbo].[SequenciaMisturasSequenciado] SELECT [NomeMateriaPrima],[Proporcao] FROM  [sequenciamento].[dbo].[SequenciaMistura] ORDER BY [Proporcao] DESC\par
+\tab\tab\tab\tab\tab --SELECT * FROM [sequenciamento].[dbo].[SequenciaMisturasSequenciado] ORDER BY ID\par
+\tab\tab\tab\tab\tab\tab\tab\par
+\tab\tab\tab\tab\tab SET @Contador = 1\par
+\par
+\tab\tab\tab\tab\tab WHILE @Contador <= (SELECT Max(ID) FROM [sequenciamento].[dbo].[SequenciaMisturasSequenciado])\par
+\tab\tab\tab\tab\tab\tab\tab\par
+\tab\tab\tab\tab\tab BEGIN\par
+\par
+\tab\tab\tab\tab\tab SET @NomeColunaAtual = (SELECT [NomeMateriaPrima] FROM [sequenciamento].[dbo].[SequenciaMisturasSequenciado] WHERE ID = @Contador)\par
+\par
+\tab\tab\tab\tab\tab\lang1033 IF (@Contador = 1)\tab SET @QueryOrder =  '['+@NomeColunaAtual+'] DESC' ELSE  SET @QueryOrder = @QueryOrder + ','+ '['+@NomeColunaAtual+'] DESC'\par
+\par
+\tab\tab\tab\tab\tab SET @Contador = @Contador + 1\par
+\par
+\tab\tab\tab\tab\tab END\par
+\par
+\tab\tab\tab\tab\tab PRINT @UltimaOrdem\par
+\tab\tab\tab\tab\tab PRINT @UltimaReceita\par
+\tab\tab\tab\tab\tab PRINT @QueryOrder\par
+\tab\tab\tab\tab\tab SET @StringSQL =' INSERT INTO  [sequenciamento].[dbo].[Sequenciamento] SELECT TOP 1 Ordens.Ordem FROM [sequenciamento].[dbo].[Ordens] Ordens LEFT JOIN [sequenciamento].[dbo].[Receita] Receita ON Ordens.[Codigo Material] = Receita.[Codigo Material] WHERE Ordens.Ordem NOT IN (SELECT Ordem FROM Sequenciamento) ORDER BY '+ @QueryOrder\par
+\par
+\tab\tab\tab\tab\tab PRINT @StringSQL\par
+\tab\tab\tab\tab\tab --IF @UltimaOrdem=999 BREAK\par
+\tab\tab\tab\tab\tab EXECUTE(@StringSQL)\tab\tab\tab\par
+\tab\tab\tab\tab\tab\lang1046 --IF @Contador=3 BREAK\par
+\par
+\tab\tab\tab\tab\tab TRUNCATE TABLE [sequenciamento].[dbo].[SequenciaMistura]\par
+\par
+\tab\tab\tab\tab\tab TRUNCATE TABLE [sequenciamento].[dbo].[SequenciaMisturasSequenciado]\par
+\tab\tab\tab\tab\tab\tab\par
+\tab\tab\tab\tab END /* INSERE COLUNAS DA ULTIMA RECEITA */\par
+\tab\tab\tab\tab END\par
+\tab\tab END /* VERIFICA QUAIS MATERIAS PRIMAS TEM NA ULTIMA SEQUENCIA */\par
+\par
+END /* ORDENA\'c7\'c3O DAS MISTURAS COM RELA\'c7\'c3O A ULTIMA SEQUENCIA */\par
+\par
+END /* SEQUENCIAMENTO HEUR\'cdSTICO */\par
+
+\pard\sa200\sl276\slmult1\f1\fs22\lang22\par
+}
+ 
